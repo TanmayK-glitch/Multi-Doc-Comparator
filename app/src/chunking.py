@@ -52,7 +52,7 @@ def load_documents():
             text=text,
             provider="gemini",
             section=section,
-            url="PUT_URL_HERE"
+            url=URLS[section]
         )
 
         all_chunks.extend(chunks)
@@ -70,4 +70,4 @@ if __name__ == "__main__":
         print(f"CHUNK {i + 1}")
         print("=" * 60)
         print(chunk["metadata"])
-        print(chunk["text"][:500])
+        print(chunk["text"][:500])  
