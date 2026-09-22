@@ -12,7 +12,7 @@ collection = client.get_collection(
 )
 
 question = [
-    "What are Gemini's free tier rate limits?"
+    "Does Gemini support function calling?"
 ]
 
 result = collection.query(
