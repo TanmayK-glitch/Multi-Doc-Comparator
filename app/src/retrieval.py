@@ -13,26 +13,33 @@ collection = client.get_collection(
     name="my-collection"
 )
 
-question = [
-    "What are Groq's rate limits?"
-]
+def retrieve_for_provider(query, provider, top_k):
+    result = collection.query(
+        query_texts=[query],
+        n_results=top_k,
+        where={"provider": provider}
+    )
 
-result = collection.query(
-    query_texts=question,
-    n_results=5,
-    where={"provider": "groq"}
-)
+    return result
 
-for i in range(len(result["documents"][0])):
-    print("\n" + "=" * 80)
-    print(f"RESULT {i + 1}")
-    print("=" * 80)
 
-    print(f"Distance : {result['distances'][0][i]}")
-    print(f"ID       : {result['ids'][0][i]}")
+def print_results(result):
+    for i, document in enumerate(result["documents"][0]):
+        print("\n" + "=" * 80)
+        print(f"RESULT {i + 1}")
+        print("=" * 80)
+        print(f"Distance : {result['distances'][0][i]}")
+        print(f"ID       : {result['ids'][0][i]}")
+        print("\nMetadata:")
+        print(result["metadatas"][0][i])
+        print("\nDocument:")
+        print(document)
 
-    print("\nMetadata:")
-    print(result["metadatas"][0][i])
 
-    print("\nDocument:")
-    print(result["documents"][0][i])
+if __name__ == "__main__":
+    result = retrieve_for_provider(
+        query="What are Groq's rate limits?",
+        provider="gemini",
+        top_k=5
+    )
+    print_results(result)
