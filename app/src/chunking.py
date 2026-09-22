@@ -2,15 +2,23 @@ from pathlib import Path
 import re
 
 URLS = {
-    "auth": "https://ai.google.dev/gemini-api/docs/oauth?hl=en",
-    "pricing": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
-    "rate_limits": "https://ai.google.dev/gemini-api/docs/rate-limits?hl=en",
-    "models": "https://ai.google.dev/gemini-api/docs/models?hl=en",
-    "tool_calling": "https://ai.google.dev/gemini-api/docs/function-calling?hl=en"
+    "gemini": {
+        "auth": "https://ai.google.dev/gemini-api/docs/oauth?hl=en",
+        "pricing": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "rate_limits": "https://ai.google.dev/gemini-api/docs/rate-limits?hl=en",
+        "models": "https://ai.google.dev/gemini-api/docs/models?hl=en",
+        "tool_calling": "https://ai.google.dev/gemini-api/docs/function-calling?hl=en"
+    },
+    "groq": {
+        "auth": "https://console.groq.com/docs/tool-use/remote-mcp/connectors#authentication",
+        "models": "https://console.groq.com/docs/models",
+        "rate_limits": "https://console.groq.com/docs/rate-limits",
+        "tool_calling": "https://console.groq.com/docs/tool-use/local-tool-calling"
+    }
 }
 
 
-DOCUMENTS_DIR = Path(__file__).resolve().parent.parent / "documents" / "gemini"
+DOCUMENTS_DIR = Path(__file__).resolve().parent.parent / "documents"
 
 
 def chunk_markdown(text, provider, section, url):
@@ -32,7 +40,7 @@ def chunk_markdown(text, provider, section, url):
             "metadata": {
                 "provider": provider,
                 "section": section,
-                "url": URLS[section]
+                "url": url
             }
         })
 
@@ -42,20 +50,26 @@ def chunk_markdown(text, provider, section, url):
 def load_documents():
     all_chunks = []
 
-    for file_path in DOCUMENTS_DIR.glob("*.md"):
+    for provider_dir in sorted(DOCUMENTS_DIR.iterdir()):
+        if not provider_dir.is_dir():
+            continue
 
-        section = file_path.stem
+        provider = provider_dir.name
+        provider_urls = URLS.get(provider, {})
 
-        text = file_path.read_text(encoding="utf-8")
+        for file_path in sorted(provider_dir.glob("*.md")):
+            section = file_path.stem
 
-        chunks = chunk_markdown(
-            text=text,
-            provider="gemini",
-            section=section,
-            url=URLS[section]
-        )
+            text = file_path.read_text(encoding="utf-8")
 
-        all_chunks.extend(chunks)
+            chunks = chunk_markdown(
+                text=text,
+                provider=provider,
+                section=section,
+                url=provider_urls.get(section, "")
+            )
+
+            all_chunks.extend(chunks)
 
     return all_chunks
 

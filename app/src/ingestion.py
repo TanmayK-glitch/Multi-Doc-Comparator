@@ -1,6 +1,10 @@
+from pathlib import Path
+
 import chromadb
 from sentence_transformers import SentenceTransformer
 from chunking import load_documents
+
+from chromadb.errors import NotFoundError
 
 chunks = load_documents()
 
@@ -18,10 +22,15 @@ embeddings = model.encode(
 ).tolist()
 
 client = chromadb.PersistentClient(
-    path="./data/chroma"
+    path=Path(__file__).resolve().parent / "data" / "chroma"
 )
 
-collection = client.get_or_create_collection(
+try:
+    client.delete_collection(name="my-collection")
+except NotFoundError:
+    pass
+
+collection = client.create_collection(
     name="my-collection"
 )
 

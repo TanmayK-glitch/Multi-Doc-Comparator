@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import chromadb
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 client = chromadb.PersistentClient(
-    path="./data/chroma"
+    path=Path(__file__).resolve().parent / "data" / "chroma"
 )
 
 collection = client.get_collection(
@@ -12,12 +14,13 @@ collection = client.get_collection(
 )
 
 question = [
-    "Does Gemini support function calling?"
+    "What are Groq's rate limits?"
 ]
 
 result = collection.query(
     query_texts=question,
-    n_results=5
+    n_results=5,
+    where={"provider": "groq"}
 )
 
 for i in range(len(result["documents"][0])):
