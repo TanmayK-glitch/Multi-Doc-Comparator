@@ -22,6 +22,20 @@ def retrieve_for_provider(query, provider, top_k):
 
     return result
 
+def retrieve_from_providers(query, providers, top_k=5):
+    all_chunks = []
+
+    for provider in providers:
+        result = collection.query(
+            query_texts=[query],
+            n_results=top_k,
+            where={"provider": provider}
+        )
+
+        all_chunks.append(result)
+        
+    return all_chunks
+
 
 def print_results(result):
     for i, document in enumerate(result["documents"][0]):
@@ -37,9 +51,16 @@ def print_results(result):
 
 
 if __name__ == "__main__":
-    result = retrieve_for_provider(
-        query="What are Groq's rate limits?",
-        provider="gemini",
+    # result = retrieve_for_provider(
+    #     query="What are Groq's rate limits?",
+    #     provider="groq",
+    #     top_k=5
+    # )
+
+    result = retrieve_from_providers(
+        query="Compare the rate limits of Gemini and Groq",
+        providers=["gemini", "groq"],
         top_k=5
     )
-    print_results(result)
+    for provider_result in result:
+        print_results(provider_result)
