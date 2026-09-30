@@ -58,8 +58,8 @@ def search(query, providers, retrieval_top_k=5, rerank_top_k=5):
 
 if __name__ == "__main__":
     results = search(
-        query="Compare the rate limits of Gemini and Groq",
-        providers=["gemini", "groq"],
+        query="Compare the models available from Gemini and Groq.",
+        providers=["groq", "gemini"],
         retrieval_top_k=5,
         rerank_top_k=5,
     )
