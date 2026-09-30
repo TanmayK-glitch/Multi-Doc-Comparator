@@ -1,5 +1,6 @@
 from retrieval import retrieve_from_providers
 from reranking import rerank
+from generation import generate_answer
 
 # Providers for identify_providers func 
 # PROVIDERS = ["gemini", "openrouter", "anthropic", "groq"]
@@ -57,12 +58,20 @@ def search(query, providers, retrieval_top_k=5, rerank_top_k=5):
 
 
 if __name__ == "__main__":
+    query = "What is the average latency of Gemini and Groq from Pune?"
+
     results = search(
-        query="Compare the models available from Gemini and Groq.",
+        query=query,
         providers=["groq", "gemini"],
         retrieval_top_k=5,
         rerank_top_k=5,
     )
 
-    for result in results:
-        print(result)
+    generated_answer = generate_answer(
+        query=query,
+        retrieved_chunks=results
+    )
+
+    # for result in results:
+    #     print(result)
+    print(generated_answer)
