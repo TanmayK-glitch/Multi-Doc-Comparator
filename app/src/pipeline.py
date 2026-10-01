@@ -1,6 +1,5 @@
 from retrieval import retrieve_from_providers
 from reranking import rerank
-from generation import generate_answer
 
 # Providers for identify_providers func 
 # PROVIDERS = ["gemini", "openrouter", "anthropic", "groq"]
@@ -58,7 +57,9 @@ def search(query, providers, retrieval_top_k=5, rerank_top_k=5):
 
 
 if __name__ == "__main__":
-    query = "What is the average latency of Gemini and Groq from Pune?"
+    from generation import generate_answer
+
+    query = "Compare Groq and Gemini's documented approaches to function/tool calling. Cover: how tools are declared, how tool calls are represented in the model response, how the application supplies the tool result, whether parallel/compositional tool calling is supported, and what MCP-related capabilities are documented for each."
 
     results = search(
         query=query,

@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # )
 
     result = retrieve_from_providers(
-        query="Compare the rate limits of Gemini and Groq",
-        providers=["gemini", "groq"],
+        query="Compare Groq and Gemini's documented approaches to function/tool calling. Cover: how tools are declared, how tool calls are represented in the model response, how the application supplies the tool result, whether parallel/compositional tool calling is supported, and what MCP-related capabilities are documented for each.",
+        providers=["groq", "gemini"],
         top_k=5
     )
     for provider_result in result:
