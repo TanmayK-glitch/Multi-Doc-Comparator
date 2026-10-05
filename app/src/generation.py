@@ -1,67 +1,70 @@
-from ollama import chat
+import ollama
 
 
 def generate_answer(query, retrieved_chunks):
-    context = "\n\n".join(
-        chunk["text"]
-        for chunk in retrieved_chunks
-    )
+    source_blocks = []
 
-    response = chat(
+    for index, chunk in enumerate(retrieved_chunks, start=1):
+        metadata = chunk.get("metadata", {})
+
+        provider = metadata.get("provider", "unknown")
+        section = metadata.get("section", "unknown")
+        url = metadata.get("url", "unknown")
+
+        source_blocks.append(
+            f"""
+[SOURCE {index}]
+provider: {provider}
+section: {section}
+url: {url}
+
+content:
+{chunk["text"]}
+"""
+        )
+
+    context = "\n".join(source_blocks)
+
+    system_prompt = """
+You are a documentation comparison assistant.
+
+Answer the user's question using ONLY the supplied sources.
+
+Rules:
+1. Do not use outside knowledge.
+2. Do not infer or assume a capability that is not explicitly supported by the sources.
+3. Every factual claim about a provider must include a citation in this format:
+   [SOURCE N]
+4. Keep provider-specific evidence separate. Do not transfer a capability from one provider to another.
+5. If the supplied sources do not establish an answer for a provider, explicitly write:
+   "Not specified in the retrieved documentation."
+6. Follow every part of the user's question.
+7. Prefer a structured comparison with clear sections or a table.
+"""
+
+    user_prompt = f"""
+Question:
+{query}
+
+Retrieved documentation:
+{context}
+"""
+
+    response = ollama.chat(
         model="qwen3:8b",
-        think=False,
-        options={
-            "num_predict": 2000,
-        },
         messages=[
             {
                 "role": "system",
-                "content": (
-                    "Answer using only the provided context. "
-                    "If the information is not available in the provided context, "
-                    "do not generate an answer on your own."
-                ),
+                "content": system_prompt,
             },
             {
                 "role": "user",
-                "content": f"Question: {query}\nContext:\n{context}",
+                "content": user_prompt,
             },
         ],
+        options={
+            "num_predict": 1500,
+        },
     )
+
     return response.message.content
-
-
-if __name__ == "__main__":
-    import sys
-
-    from retrieval import retrieve_from_providers
-
-    sys.stdout.reconfigure(encoding="utf-8")
-
-    query = "Compare Groq and Gemini's documented approaches to function/tool calling. Cover: how tools are declared, how tool calls are represented in the model response, how the application supplies the tool result, whether parallel/compositional tool calling is supported, and what MCP-related capabilities are documented for each."
-    providers = ["groq", "gemini"]
-    retrieval_top_k = 5
-
-    provider_results = retrieve_from_providers(
-        query=query,
-        providers=providers,
-        top_k=retrieval_top_k,
-    )
-
-    retrieved_chunks = [
-        {"text": document}
-        for result in provider_results
-        for document in result["documents"][0]
-    ]
-
-    print(f"Retrieved {len(retrieved_chunks)} chunks for generation")
-    for index, chunk in enumerate(retrieved_chunks, start=1):
-        print(f"{index}. {chunk['text'][:120].replace(chr(10), ' ')}...")
-
-    answer = generate_answer(
-        query=query,
-        retrieved_chunks=retrieved_chunks,
-    )
-
-    print("\nGenerated answer:\n")
-    print(answer)
