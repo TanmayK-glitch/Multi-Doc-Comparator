@@ -35,44 +35,50 @@ def rerank(query, candidates, top_k):
 
     return ranked_candidates
 
-if __name__ == "__main__":
 
-    candidates = [
-        {
-            "text": (
-                "Production models are intended for production environments. "
-                "They meet or exceed Groq's standards for speed, quality, and reliability."
-            ),
-            "metadata": {"provider": "groq", "section": "Production Models"},
-        },
-        {
-            "text": (
-                "Preview models are intended for evaluation purposes only and should not "
-                "be used in production because they may be discontinued at short notice."
-            ),
-            "metadata": {"provider": "groq", "section": "Preview Models"},
-        },
-        {
-            "text": (
-                "Groq provides model-specific rate limits, context windows, and maximum "
-                "completion token limits in its model documentation."
-            ),
-            "metadata": {"provider": "groq", "section": "Rate Limits"},
-        },
-        {
-            "text": (
-                "Gemini pricing documentation lists the input and output token prices "
-                "for each supported model."
-            ),
-            "metadata": {"provider": "gemini", "section": "Pricing"},
-        },
-    ]
+def build_candidates(provider_results):
+    candidates = []
+
+    for result in provider_results:
+        documents = result["documents"][0]
+        metadatas = result["metadatas"][0]
+        ids = result["ids"][0]
+        distances = result.get("distances", [[]])[0]
+
+        for index, document in enumerate(documents):
+            candidate = {
+                "id": ids[index],
+                "text": document,
+                "metadata": metadatas[index],
+            }
+
+            if distances:
+                candidate["retrieval_distance"] = distances[index]
+
+            candidates.append(candidate)
+
+    return candidates
+
+
+if __name__ == "__main__":
+    import sys
+
+    from retrieval import retrieve_from_providers
+
+    sys.stdout.reconfigure(encoding="utf-8")
 
     query = (
-        "What is the documented difference between Groq's Production Models and "
-        "Preview Models? Why does the documentation recommend against using Preview "
-        "Models in production?"
+        "Compare Groq and Gemini's documented approaches to function/tool calling. Cover: how tools are declared, how tool calls are represented in the model response, how the application supplies the tool result, whether parallel/compositional tool calling is supported, and what MCP-related capabilities are documented for each."
     )
+
+    provider_results = retrieve_from_providers(
+        query=query,
+        providers=["groq", "gemini"],
+        top_k=5,
+    )
+    candidates = build_candidates(provider_results)
+
+    print(f"Retrieved {len(candidates)} chunks for reranking")
 
     results = rerank(
         query=query,

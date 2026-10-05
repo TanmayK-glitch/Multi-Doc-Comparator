@@ -1,31 +1,8 @@
 from retrieval import retrieve_from_providers
-from reranking import rerank
+from reranking import build_candidates, rerank
 
 # Providers for identify_providers func 
 # PROVIDERS = ["gemini", "openrouter", "anthropic", "groq"]
-
-def build_candidates(provider_results):
-    candidates = []
-
-    for result in provider_results:
-        documents = result["documents"][0]
-        metadatas = result["metadatas"][0]
-        ids = result["ids"][0]
-        distances = result.get("distances", [[]])[0]
-
-        for index, document in enumerate(documents):
-            candidate = {
-                "id": ids[index],
-                "text": document,
-                "metadata": metadatas[index],
-            }
-
-            if distances:
-                candidate["retrieval_distance"] = distances[index]
-
-            candidates.append(candidate)
-
-    return candidates
 
 
 # def identify_providers(query):
