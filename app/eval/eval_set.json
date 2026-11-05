@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "type": "single_section",
+    "difficulty": "easy",
+    "question": "Compare the authentication approaches documented by Gemini, Groq, and OpenRouter.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "auth"},
+      {"provider": "groq", "section": "auth"},
+      {"provider": "openrouter", "section": "auth"}
+    ]
+  },
+  {
+    "id": 2,
+    "type": "single_section",
+    "difficulty": "easy",
+    "question": "Compare the pricing models documented by Gemini, Groq, and OpenRouter.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "pricing"},
+      {"provider": "groq", "section": "pricing"},
+      {"provider": "openrouter", "section": "pricing"}
+    ]
+  },
+  {
+    "id": 3,
+    "type": "single_section",
+    "difficulty": "easy",
+    "question": "Compare the documented rate limits and free-tier limitations of Gemini, Groq, and OpenRouter.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "rate-limits"},
+      {"provider": "groq", "section": "rate-limits"},
+      {"provider": "openrouter", "section": "rate-limits"}
+    ]
+  },
+  {
+    "id": 4,
+    "type": "single_section",
+    "difficulty": "easy",
+    "question": "What models are documented as available from Gemini, Groq, and OpenRouter?",
+    "expected_sources": [
+      {"provider": "gemini", "section": "models"},
+      {"provider": "groq", "section": "models"},
+      {"provider": "openrouter", "section": "models"}
+    ]
+  },
+  {
+    "id": 5,
+    "type": "single_section",
+    "difficulty": "medium",
+    "question": "Compare how Gemini, Groq, and OpenRouter document the declaration of tools or functions.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  },
+  {
+    "id": 6,
+    "type": "single_section",
+    "difficulty": "medium",
+    "question": "Compare how Gemini, Groq, and OpenRouter represent tool or function calls in the model response.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  },
+  {
+    "id": 7,
+    "type": "single_section",
+    "difficulty": "medium",
+    "question": "Compare how an application supplies the result of a tool or function call back to Gemini, Groq, and OpenRouter.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  },
+  {
+    "id": 8,
+    "type": "single_section",
+    "difficulty": "medium",
+    "question": "Which of Gemini, Groq, and OpenRouter document support for parallel or multiple tool/function calling?",
+    "expected_sources": [
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  },
+  {
+    "id": 9,
+    "type": "single_section",
+    "difficulty": "medium",
+    "question": "Compare the MCP-related capabilities documented by Gemini, Groq, and OpenRouter.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  },
+  {
+    "id": 10,
+    "type": "cross_section",
+    "difficulty": "hard",
+    "question": "For someone choosing between Gemini, Groq, and OpenRouter for an API project, compare their documented pricing and available models.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "pricing"},
+      {"provider": "gemini", "section": "models"},
+      {"provider": "groq", "section": "pricing"},
+      {"provider": "groq", "section": "models"},
+      {"provider": "openrouter", "section": "pricing"},
+      {"provider": "openrouter", "section": "models"}
+    ]
+  },
+  {
+    "id": 11,
+    "type": "cross_section",
+    "difficulty": "hard",
+    "question": "Compare the practical API setup considerations for Gemini, Groq, and OpenRouter, including authentication and rate limits.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "auth"},
+      {"provider": "gemini", "section": "rate-limits"},
+      {"provider": "groq", "section": "auth"},
+      {"provider": "groq", "section": "rate-limits"},
+      {"provider": "openrouter", "section": "auth"},
+      {"provider": "openrouter", "section": "rate-limits"}
+    ]
+  },
+  {
+    "id": 12,
+    "type": "full_comparison",
+    "difficulty": "hard",
+    "question": "Give a documentation-based comparison of Gemini, Groq, and OpenRouter covering authentication, pricing, rate limits, available models, and tool or function calling.",
+    "expected_sources": [
+      {"provider": "gemini", "section": "auth"},
+      {"provider": "gemini", "section": "pricing"},
+      {"provider": "gemini", "section": "rate-limits"},
+      {"provider": "gemini", "section": "models"},
+      {"provider": "gemini", "section": "tool-calling"},
+      {"provider": "groq", "section": "auth"},
+      {"provider": "groq", "section": "pricing"},
+      {"provider": "groq", "section": "rate-limits"},
+      {"provider": "groq", "section": "models"},
+      {"provider": "groq", "section": "tool-calling"},
+      {"provider": "openrouter", "section": "auth"},
+      {"provider": "openrouter", "section": "pricing"},
+      {"provider": "openrouter", "section": "rate-limits"},
+      {"provider": "openrouter", "section": "models"},
+      {"provider": "openrouter", "section": "tool-calling"}
+    ]
+  }
+]
